@@ -1,0 +1,89 @@
+/* --- Upload Button --- */
+.upload-button {
+  font-family: inherit;
+  font-size: 18px; /* Adjusted from 20px */
+  background: #212121;
+  color: white;
+  fill: rgb(155, 153, 153);
+  padding: 0.7em 1em;
+  padding-left: 0.9em;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  border-radius: 15px;
+  font-weight: 1000;
+  overflow: hidden; /* Important for the animation */
+  position: relative; /* Important for the animation */
+}
+
+.upload-button .button-text {
+  display: block;
+  margin-left: 0.3em;
+  transition: all 0.3s ease-in-out;
+}
+
+.upload-button .svg-wrapper {
+  display: block;
+  transform-origin: center center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.upload-button:hover {
+  background: #000;
+}
+
+.upload-button:hover .svg-wrapper {
+  /* This transform is part of the text-disappearing effect */
+  transform: translateX(250%) scale(1.5);
+}
+
+.upload-button:hover .button-text {
+  opacity: 0;
+  transform: translateX(10px);
+}
+
+.upload-button:active {
+  transform: scale(0.95);
+}
+
+/* --- File Action Buttons (Download/Delete) --- */
+.file-action-button {
+  font-family: inherit;
+  font-size: 12px;
+  padding: 0.5em 1em;
+  font-weight: 600;
+  /* 关键：透明文字 + 背景渐变裁剪到文字 */
+  color: transparent;
+  background: linear-gradient(90deg, #ff2a6d, #ff9671, #f9f871, #05d9e8, #00f5d4);
+  background-clip: text;
+  -webkit-background-clip: text; /* 兼容Safari */
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+/* 可选： hover 时增强渐变效果或添加其他动效 */
+.file-action-button:hover {
+  background: linear-gradient(90deg, #ff0054, #ff7a5a, #f9f04d, #00e7f9, #00ffd5);
+  background-clip: text;
+  -webkit-background-clip: text;
+  transform: scale(1.05);
+}
+
+.download-button {
+  background-color: #143240; /* From user's download button example */
+}
+
+.download-button:hover {
+  background-color: #0f2530;
+}
+
+.delete-button {
+  background-color: rgb(255, 69, 69); /* From user's delete button example */
+}
+
+.delete-button:hover {
+  background-color: rgb(223, 50, 50);
+}

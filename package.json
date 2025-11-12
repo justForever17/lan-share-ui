@@ -6,22 +6,40 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "package-win": "npm run build && rmdir /S /Q .next\\standalone\\node_modules\\sharp && copy package.json .next\\standalone && cd .next\\standalone && pkg . --targets node18-win-x64 --output ..\\..\\dist\\lan-share-ui.exe"
+  },
+  "bin": "server.js",
+  "pkg": {
+    "assets": [
+      ".next/static/**/*",
+      "public/**/*"
+    ],
+    "targets": [ "node18-win-x64" ],
+    "outputPath": "dist",
+    "excludes": [ "sharp" ]
   },
   "dependencies": {
+    "@types/formidable": "^3.4.6",
+    "@types/mime-types": "^3.0.1",
+    "@types/styled-components": "^5.1.35",
+    "formidable": "^3.5.4",
+    "mime-types": "^3.0.1",
+    "next": "16.0.1",
+    "path-browserify": "^1.0.1",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "next": "16.0.1"
+    "styled-components": "^6.1.19"
   },
   "devDependencies": {
-    "babel-plugin-react-compiler": "1.0.0",
-    "typescript": "^5",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
+    "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
-    "eslint-config-next": "16.0.1"
+    "eslint-config-next": "16.0.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
