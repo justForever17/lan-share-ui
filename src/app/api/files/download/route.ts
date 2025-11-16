@@ -31,7 +31,9 @@ export async function GET(request: Request) {
 
     // 设置响应头，触发浏览器下载
     const headers = new Headers();
-    headers.append('Content-Disposition', `attachment; filename="${fileName}"`);
+    // 兼容中文文件名，使用 RFC 5987 格式
+    const encodedFileName = encodeURIComponent(fileName);
+    headers.append('Content-Disposition', `attachment; filename*=UTF-8''${encodedFileName}`);
     headers.append('Content-Type', 'application/octet-stream'); // 通用二进制流类型
 
     return new NextResponse(fileBuffer, { headers });
