@@ -14,12 +14,13 @@ export async function GET(request: NextRequest) {
 
     const fileDetails = await Promise.all(
       files.map(async (file) => {
-        const filePath = path.join(directoryPath, file.name);
-        const stats = await fs.stat(filePath);
+        const fileRelativePath = path.join(currentPath, file.name);
+        const stats = await fs.stat(path.join(directoryPath, file.name));
         const fileType = getFileType(file.name);
 
         return {
           name: file.name,
+          path: fileRelativePath, // Add the full relative path
           size: stats.size,
           type: file.isDirectory() ? 'folder' : 'file',
           uploadTime: stats.mtime.toLocaleString(),

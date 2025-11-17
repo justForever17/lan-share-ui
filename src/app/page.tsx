@@ -15,6 +15,7 @@ import SettingsModal from '@/components/SettingsModal';
 // 定义文件类型的接口
 interface FileData {
   name: string;
+  path: string;
   size: number;
   type: 'file' | 'folder';
   uploadTime: string;
@@ -86,7 +87,7 @@ const FileListContainer = styled.div`
 export default function Home() {
   const [files, setFiles] = useState<FileData[]>([]);
   const [isDeletePromptOpen, setIsDeletePromptOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<{ name: string; type: 'file' | 'folder' } | null>(null);
+  const [itemToDelete, setItemToDelete] = useState<{ path: string; type: 'file' | 'folder'; name: string } | null>(null);
   const [isMounted, setIsMounted] = useState(false);
   const [currentPath, setCurrentPath] = useState('');
   const [filter, setFilter] = useState('');
@@ -120,8 +121,8 @@ export default function Home() {
     fetchFiles();
   }, [currentPath]);
 
-  const handleDeleteClick = (name: string, type: 'file' | 'folder') => {
-    setItemToDelete({ name, type });
+  const handleDeleteClick = (path: string, type: 'file' | 'folder', name: string) => {
+    setItemToDelete({ path, type, name });
     setIsDeletePromptOpen(true);
   };
 
@@ -131,8 +132,8 @@ export default function Home() {
     const isFile = itemToDelete.type === 'file';
     const apiUrl = isFile ? '/api/files/delete' : '/api/folders/delete';
     const body = isFile 
-      ? { fileName: itemToDelete.name, password }
-      : { folderPath: itemToDelete.name, password };
+      ? { fileName: itemToDelete.path, password }
+      : { folderPath: itemToDelete.path, password };
 
     try {
       const response = await fetch(apiUrl, {
@@ -142,7 +143,7 @@ export default function Home() {
       });
 
       if (response.ok) {
-        setFiles((prevFiles) => prevFiles.filter((file) => file.name !== itemToDelete.name));
+        setFiles((prevFiles) => prevFiles.filter((file) => file.path !== itemToDelete.path));
         alert(`${isFile ? '文件' : '文件夹'} "${itemToDelete.name}" 已成功删除`);
       } else {
         const data = await response.json();
@@ -246,18 +247,18 @@ export default function Home() {
         <FileListContainer>
           <GlassmorphicCard>
             <div className="flex flex-col">
-              {filteredFiles.map((file, index) => (
+              {filteredFiles.map((file) => (
                 <FileCard 
-                  key={index} 
-                  name={file.name} 
+                  key={file.path}
+                  name={file.name}
+                  path={file.path}
                   size={formatFileSize(file.size)} 
                   type={file.type}
                   fileType={file.fileType}
                   uploadTime={file.uploadTime}
                   uploadIp={file.uploadIp}
-                  onDelete={() => handleDeleteClick(file.name, file.type)}
+                  onDelete={() => handleDeleteClick(file.path, file.type, file.name)}
                   setCurrentPath={setCurrentPath}
-                  currentPath={currentPath}
                 />
               ))}
             </div>

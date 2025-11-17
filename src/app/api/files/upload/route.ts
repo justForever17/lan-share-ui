@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
 import { pipeline } from 'stream/promises';
@@ -51,7 +51,7 @@ async function getUniqueFileName(directory: string, originalName: string): Promi
   return fileName;
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const settings = await getSettings();
     const formData = await request.formData();
@@ -92,6 +92,10 @@ export async function POST(request: Request) {
 
     // --- 更新已用容量 ---
     await updateUsedCapacity(file.size);
+
+    // --- 记录上传日志 ---
+    const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'Unknown IP';
+    console.log(`File uploaded: ${uniqueFileName} to path: ${targetPath} from IP: ${clientIp}`);
 
     return NextResponse.json({ message: 'File uploaded successfully', fileName: uniqueFileName });
 

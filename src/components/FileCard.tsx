@@ -6,24 +6,24 @@ import FileIcon from './FileIcon';
 
 interface FileCardProps {
   name: string;
+  path: string;
   size: string;
   type: 'file' | 'folder';
   fileType: string;
   uploadTime: string;
   uploadIp: string;
-  onDelete: (fileName: string) => void;
+  onDelete: (path: string) => void;
   setCurrentPath: (path: string) => void;
-  currentPath: string;
 }
 
-const FileCard: React.FC<FileCardProps> = ({ name, size, type, fileType, uploadTime, uploadIp, onDelete, setCurrentPath, currentPath }) => {
+const FileCard: React.FC<FileCardProps> = ({ name, path, size, type, fileType, uploadTime, uploadIp, onDelete, setCurrentPath }) => {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const canPreview = ['文档', '图片', '音频', '视频'].includes(fileType);
 
   const handleCardClick = () => {
     if (type === 'folder') {
-      setCurrentPath(currentPath ? `${currentPath}/${name}` : name);
+      setCurrentPath(path);
     } else if (canPreview) {
       setIsPreviewOpen(true);
     }
@@ -64,19 +64,17 @@ const FileCard: React.FC<FileCardProps> = ({ name, size, type, fileType, uploadT
               </button>
             )}
             {type === 'file' && (
-              <div
+              <DownloadButton
                 onClick={(e) => {
                   e.stopPropagation();
-                  window.location.href = `/api/files/download?fileName=${encodeURIComponent(currentPath ? `${currentPath}/${name}` : name)}`;
+                  window.location.href = `/api/files/download?fileName=${encodeURIComponent(path)}`;
                 }}
-              >
-                <DownloadButton />
-              </div>
+              />
             )}
             <div
               onClick={(e) => {
                 e.stopPropagation();
-                onDelete(name);
+                onDelete(path);
               }}
             >
               <DeleteButton />
@@ -88,7 +86,7 @@ const FileCard: React.FC<FileCardProps> = ({ name, size, type, fileType, uploadT
         <PreviewModal
           isOpen={isPreviewOpen}
           onClose={handleClosePreview}
-          fileName={currentPath ? `${currentPath}/${name}` : name}
+          fileName={path}
           fileType={fileType}
         />
       )}

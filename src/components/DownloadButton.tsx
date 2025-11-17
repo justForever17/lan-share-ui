@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useId } from 'react';
 import styled from 'styled-components';
 
-const Button = () => {
+interface DownloadButtonProps {
+  onClick: (e: React.MouseEvent<HTMLLabelElement>) => void;
+}
+
+const DownloadButton: React.FC<DownloadButtonProps> = ({ onClick }) => {
+  const checkId = useId();
+
   return (
     <StyledWrapper>
       <div>
-        <input type="checkbox" id="check" />
-        <label htmlFor="check" id="upload">
+        <input type="checkbox" id={checkId} />
+        <label htmlFor={checkId} id="upload" onClick={onClick}>
           <div id="app">
             <div id="arrow" />
             <div id="success">
@@ -22,7 +28,7 @@ const Button = () => {
 }
 
 const StyledWrapper = styled.div`
-  #check {
+  input[type="checkbox"] {
     display: none;
   }
 
@@ -114,27 +120,27 @@ const StyledWrapper = styled.div`
     transform: scale(1);
   }
 
-  #check:checked + #upload {
+  input[type="checkbox"]:checked + #upload {
     width: 35px;
   }
 
-  #check:checked + #upload #arrow::before {
+  input[type="checkbox"]:checked + #upload #arrow::before {
     animation:
       _a 0.4s ease 0.4s forwards,
       _incHeight 4s ease 1s forwards;
   }
 
-  #check:checked + #upload #arrow::after {
+  input[type="checkbox"]:checked + #upload #arrow::after {
     animation:
       _b 0.4s ease 0.4s forwards,
       _incHeight 4s ease 1s forwards;
   }
 
-  #check:checked + #upload #success {
+  input[type="checkbox"]:checked + #upload #success {
     animation: _success 0.4s cubic-bezier(0, 0.74, 0.32, 1.21) 5s forwards;
   }
 
-  #check:checked + #upload #success {
+  input[type="checkbox"]:checked + #upload #success {
     animation: _success 0.3s cubic-bezier(0, 0.74, 0.32, 1.21) 5.2s forwards;
   }
 
@@ -213,4 +219,4 @@ const StyledWrapper = styled.div`
   }
 `;
 
-export default Button;
+export default DownloadButton;
